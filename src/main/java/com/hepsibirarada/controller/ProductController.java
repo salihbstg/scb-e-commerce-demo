@@ -1,12 +1,10 @@
 package com.hepsibirarada.controller;
 
-import com.hepsibirarada.dtos.CategoryDTO;
 import com.hepsibirarada.dtos.ProductDTO;
 import com.hepsibirarada.dtos.ProductEnrollDTO;
+import com.hepsibirarada.exception.CustomApplicationException;
 import com.hepsibirarada.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.valves.rewrite.RewriteCond;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,27 +34,31 @@ public class ProductController {
     //Get
     @GetMapping
     public ResponseEntity<List<ProductDTO>> findAll() {
-        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findAllProducts(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
+        ProductDTO productDTO=productService.findProductById(id);
+        if(productDTO==null){
+            throw new CustomApplicationException("Product not found!");
+        }
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")
     public ResponseEntity<Set<ProductDTO>> findByCategoryId(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(productService.findByCategoryId(id), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findProductByCategoryId(id), HttpStatus.OK);
     }
 
     @GetMapping("/range")
     public ResponseEntity<List<ProductDTO>> findByProductPriceRange(@RequestParam(name = "min") BigDecimal min, @RequestParam(name = "max") BigDecimal max) {
-        return new ResponseEntity<>(productService.findByPriceBetween(min, max), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findProductsByPriceBetween(min, max), HttpStatus.OK);
     }
 
     @GetMapping("/category/range")
     public ResponseEntity<List<ProductDTO>> findByCategoryAndProductPriceRange(@RequestParam(name = "categoryId") Long categoryId, @RequestParam(name = "min") BigDecimal min, @RequestParam(name = "max") BigDecimal max) {
-        return new ResponseEntity<>(productService.findByCategories_IdAndProductPriceBetween(categoryId, min, max), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findProductsByCategories_IdAndProductPriceBetween(categoryId, min, max), HttpStatus.OK);
     }
 
     //Update
@@ -72,14 +74,17 @@ public class ProductController {
 
     @PatchMapping("/stock/decrement/{id}")
     public ResponseEntity<ProductDTO> decrementStockByOne(@PathVariable(name = "id") Long id){
-        return new ResponseEntity<>(productService.decrementStockByOne(id),HttpStatus.OK);
+        return new ResponseEntity<>(productService.decrementProductStockByOne(id),HttpStatus.OK);
     }
 
 
     //Delete
     @DeleteMapping("/{id}")
-
     public ResponseEntity<Boolean> deleteById(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(productService.deleteProduct(id), HttpStatus.OK);
+        Boolean control=productService.deleteProduct(id);
+        if(!control){
+            throw new CustomApplicationException("Product not found!");
+        }
+        return new ResponseEntity<>(control, HttpStatus.OK);
     }
 }

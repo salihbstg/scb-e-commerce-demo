@@ -11,7 +11,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorityService {
     private final AuthorityRepository authorityRepository;
-    public Authority findById(Long id){
+    public Authority findAuthorityById(Long id){
         Optional<Authority> optionalAuthority=authorityRepository.findById(id);
         return optionalAuthority.orElse(null);
     }

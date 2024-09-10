@@ -6,8 +6,6 @@ import com.hepsibirarada.model.Category;
 import com.hepsibirarada.model.Product;
 import com.hepsibirarada.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +42,7 @@ public class CategoryService {
 
     //FIND
 
-    public CategoryDTO findByCategoryName(String categoryName) {
+    public CategoryDTO findCategoryByCategoryName(String categoryName) {
         Category category = categoryRepository.findByCategoryName(categoryName);
         if (category != null) {
             return converter.categoryToCategoryDTO(category);
@@ -53,7 +51,7 @@ public class CategoryService {
     }
 
 
-    public List<CategoryDTO> findAll() {
+    public List<CategoryDTO> findAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryDTO> categoryDTOS = new ArrayList<>();
         for (Category a : categories) {
@@ -62,7 +60,7 @@ public class CategoryService {
         return categoryDTOS;
     }
 
-    public CategoryDTO findById(Long id) {
+    public CategoryDTO findCategoryById(Long id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         CategoryDTO categoryDTO = new CategoryDTO();
         return optionalCategory.map(category -> converter.categoryToCategoryDTO(category)).orElse(null);
@@ -70,7 +68,7 @@ public class CategoryService {
 
     //DELETE
 
-    public Boolean deleteById(Long id) {
+    public Boolean deleteCategoryById(Long id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             categoryRepository.delete(optionalCategory.get());

@@ -10,7 +10,6 @@ import com.hepsibirarada.repository.CustomerRepository;
 import com.hepsibirarada.repository.OrderRepository;
 import com.hepsibirarada.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +64,7 @@ public class OrderService {
     }
 
 
-    public List<OrderDTO> findAll() {
+    public List<OrderDTO> findAllOrders() {
         List<Order> orders = orderRepository.findAll();
         List<OrderDTO> orderDTOS = new ArrayList<>();
         for (Order order : orders) {
@@ -74,7 +73,7 @@ public class OrderService {
         return orderDTOS;
     }
 
-    public List<OrderDTO> findAllByCustomerId(Long customerId) {
+    public List<OrderDTO> findAllOrdersByCustomerId(Long customerId) {
         List<Order> orders = orderRepository.findByCustomerId(customerId);
         List<OrderDTO> orderDTOS = new ArrayList<>();
         for (Order order : orders) {
@@ -84,7 +83,7 @@ public class OrderService {
     }
 
 
-    public OrderDTO findByOrderId(Long id) {
+    public OrderDTO findOrderByOrderId(Long id) {
         Optional<Order> optionalOrder=orderRepository.findById(id);
         return optionalOrder.map(converter::orderToOrderDTO).orElse(null);
     }

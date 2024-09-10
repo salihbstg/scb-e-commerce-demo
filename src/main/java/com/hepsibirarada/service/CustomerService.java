@@ -5,7 +5,6 @@ import com.hepsibirarada.dtos.CustomerDTO;
 import com.hepsibirarada.model.Customer;
 import com.hepsibirarada.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,7 @@ public class CustomerService {
     }
     //FIND
 
-    public List<CustomerDTO> findAll() {
+    public List<CustomerDTO> findAllCustomers() {
         List<CustomerDTO> customerDTOS = new ArrayList<>();
         List<Customer> customers = customerRepository.findAll();
 
@@ -48,12 +47,12 @@ public class CustomerService {
         return customerDTOS;
     }
 
-    public CustomerDTO findById(Long id) {
+    public CustomerDTO findCustomerById(Long id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         return optionalCustomer.map(customer -> converter.customerToCustomerDTO(customer)).orElse(null);
     }
 
-    public CustomerDTO findByUsername(String username) {
+    public CustomerDTO findCustomerByUsername(String username) {
         Customer customer = customerRepository.findByUsername(username);
         if (customer != null) {
             return converter.customerToCustomerDTO(customer);
@@ -61,7 +60,7 @@ public class CustomerService {
         return null;
     }
 
-    public CustomerDTO findByTc(String tc) {
+    public CustomerDTO findCustomerByTc(String tc) {
         Customer customer = customerRepository.findByTc(tc);
         if (customer != null) {
             return converter.customerToCustomerDTO(customer);

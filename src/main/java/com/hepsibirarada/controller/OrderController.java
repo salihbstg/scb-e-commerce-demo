@@ -2,11 +2,9 @@ package com.hepsibirarada.controller;
 
 import com.hepsibirarada.dtos.orders.OrderDTO;
 import com.hepsibirarada.dtos.orders.OrderRequestDTO;
-import com.hepsibirarada.model.Order;
+import com.hepsibirarada.exception.CustomApplicationException;
 import com.hepsibirarada.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +33,18 @@ public class OrderController {
     //Get
     @GetMapping
     public ResponseEntity<List<OrderDTO>> findAll() {
-        return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.findAllOrders(), HttpStatus.OK);
     }
     @GetMapping("/customer/{userId}")
     public ResponseEntity<List<OrderDTO>> findAllByCustomerId(@PathVariable(name = "userId") Long userId) {
-        return new ResponseEntity<>(orderService.findAllByCustomerId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.findAllOrdersByCustomerId(userId), HttpStatus.OK);
     }
     @GetMapping("{id}")
     public ResponseEntity<OrderDTO> findByOrderId(@PathVariable(name = "id") Long id){
-        return new ResponseEntity<>(orderService.findByOrderId(id),HttpStatus.OK);
+        OrderDTO orderDTO=orderService.findOrderByOrderId(id);
+        if(orderDTO==null){
+            throw new CustomApplicationException("Order not found!");
+        }
+        return new ResponseEntity<>(orderDTO,HttpStatus.OK);
     }
 }

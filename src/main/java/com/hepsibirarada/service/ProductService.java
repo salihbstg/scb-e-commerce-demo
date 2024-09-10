@@ -8,11 +8,9 @@ import com.hepsibirarada.model.Product;
 import com.hepsibirarada.repository.CategoryRepository;
 import com.hepsibirarada.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -45,11 +43,11 @@ public class ProductService {
         return converter.productEnrollDTOToProductDTO(productEnrollDTO);
     }
     //FIND
-    public List<ProductDTO> findAll() {
+    public List<ProductDTO> findAllProducts() {
         List<Product> product = productRepository.findAll();
         return converter.productListToProductDTOList(product);
     }
-    public ProductDTO findById(Long id) {
+    public ProductDTO findProductById(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             ProductDTO productDTO = converter.productToProductDTO(optionalProduct.get());
@@ -60,7 +58,7 @@ public class ProductService {
         }
         return null;
     }
-    public Set<ProductDTO> findByCategoryId(Long id) {
+    public Set<ProductDTO> findProductByCategoryId(Long id) {
         Set<Product> products = productRepository.findByCategories_Id(id);
         Set<ProductDTO> productDTOS = new HashSet<>();
         for (Product a : products) {
@@ -107,11 +105,11 @@ public class ProductService {
         }
         return null;
     }
-    public List<ProductDTO> findByPriceBetween(BigDecimal min,BigDecimal max){
+    public List<ProductDTO> findProductsByPriceBetween(BigDecimal min, BigDecimal max){
         List<Product> products=productRepository.findByProductPriceBetween(min, max);
         return converter.productListToProductDTOList(products);
     }
-    public List<ProductDTO> findByCategories_IdAndProductPriceBetween(Long categoryId,BigDecimal startPrice,BigDecimal endPrice){
+    public List<ProductDTO> findProductsByCategories_IdAndProductPriceBetween(Long categoryId, BigDecimal startPrice, BigDecimal endPrice){
         List<Product> products=productRepository.findByCategories_IdAndProductPriceBetween(categoryId,startPrice,endPrice);
         return converter.productListToProductDTOList(products);
     }
@@ -125,7 +123,7 @@ public class ProductService {
         }
         return null;
     }
-    public ProductDTO decrementStockByOne(Long id) {
+    public ProductDTO decrementProductStockByOne(Long id) {
         Optional<Product> optionalProduct=productRepository.findById(id);
         if(optionalProduct.isPresent()){
             Product product=optionalProduct.get();

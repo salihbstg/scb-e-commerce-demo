@@ -27,4 +27,12 @@ public class Customer {
     private String username;
     private String password;
 
+    @ManyToMany
+    @JoinTable(
+            name = "customer_authority",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private List<Authority> authority;
+
 }
